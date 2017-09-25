@@ -3,6 +3,9 @@ package com.yogop.dbprojectapi.controller;
 import com.yogop.dbprojectapi.model.Project;
 import com.yogop.dbprojectapi.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +25,18 @@ public class ProjectController {
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Project> getAllProjects() {
         return repository.findAll();
+    }
+
+    @GetMapping("/{keyword}/{page}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Project> getProjectsByKeyword(String keyword, String sortField, String sortDirection, int page, int limit) {
+        Pageable pageRequest = createPageRequest();
+        Page<Project> searchResultPage = repository.findAll(pageRequest);
+
+    }
+
+    private Pageable createPageRequest() {
+        return new PageRequest(0, 10);
     }
 
     @GetMapping("{id}")
