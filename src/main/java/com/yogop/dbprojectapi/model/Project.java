@@ -4,13 +4,14 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.sql.Timestamp;
 
 /**
  * @author Jeffrey Y. Pogoy
  * @created 14 Sep 2017 11:21 AM
  */
-@Entity
+@Entity(name = "project")
 @Data
 @XmlRootElement
 public class Project {

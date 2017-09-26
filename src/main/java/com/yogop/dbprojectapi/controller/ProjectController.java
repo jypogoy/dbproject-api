@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,21 +24,17 @@ public class ProjectController {
     private ProjectRepository repository;
 
     @GetMapping("")
-    @CrossOrigin(origins = "http://localhost:4200")
+    //@CrossOrigin(origins = "http://localhost:4200")
     public List<Project> getAllProjects() {
+        System.out.println("HI");
         return repository.findAll();
     }
 
-    @GetMapping("/{keyword}/{page}")
+    @GetMapping("/filter")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<Project> getProjectsByKeyword(String keyword, String sortField, String sortDirection, int page, int limit) {
-        Pageable pageRequest = createPageRequest();
-        Page<Project> searchResultPage = repository.findAll(pageRequest);
-
-    }
-
-    private Pageable createPageRequest() {
-        return new PageRequest(0, 10);
+    public List<Project> getProjectsByKeyword(@RequestParam("keyword") String keyword, @RequestParam("page") int page, 
+            @RequestParam("displaySize") int displaySize, @RequestParam("sortDirection") String sortDirection, @RequestParam("sortField") String sortField) {  
+        return repository.findByKeyword(keyword, new PageRequest(page, displaySize, Direction.valueOf(sortDirection), sortField));
     }
 
     @GetMapping("{id}")
