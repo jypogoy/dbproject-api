@@ -20,4 +20,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM project p WHERE p.name LIKE %:keyword% OR p.description LIKE %:keyword%")
     List<Project> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query("SELECT COUNT(p) FROM project p WHERE p.name LIKE %:keyword% OR p.description LIKE %:keyword%")
+    int countByKeyword(@Param("keyword") String keyword);
+
 }

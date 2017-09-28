@@ -24,17 +24,22 @@ public class ProjectController {
     private ProjectRepository repository;
 
     @GetMapping("")
-    //@CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<Project> getAllProjects() {
-        System.out.println("HI");
         return repository.findAll();
     }
 
     @GetMapping("/filter")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<Project> getProjectsByKeyword(@RequestParam("keyword") String keyword, @RequestParam("page") int page, 
-            @RequestParam("displaySize") int displaySize, @RequestParam("sortDirection") String sortDirection, @RequestParam("sortField") String sortField) {  
-        return repository.findByKeyword(keyword, new PageRequest(page, displaySize, Direction.valueOf(sortDirection), sortField));
+    public List<Project> getProjectsByKeyword(@RequestParam("keyword") String keyword, @RequestParam("currentPage") int currentPage,
+            @RequestParam("itemsPerPage") int itemsPerPage, @RequestParam("sortDirection") String sortDirection, @RequestParam("sortField") String sortField) {
+        return repository.findByKeyword(keyword, new PageRequest(currentPage, itemsPerPage, Direction.valueOf(sortDirection), sortField));
+    }
+
+    @GetMapping("/count")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public int countProjects(@RequestParam("keyword") String keyword) {
+        return repository.countByKeyword(keyword);
     }
 
     @GetMapping("{id}")
